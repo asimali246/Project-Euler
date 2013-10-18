@@ -1,0 +1,90 @@
+/*
+  Author: Asim Ali
+  Euler Problem: 95
+*/
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <cstdio>
+#include <iomanip>
+#include <algorithm>
+#include <stack>
+#include <vector>
+#include <fstream>
+#include <map>
+#include <bitset>
+#include <cstring>
+using namespace std;
+#define ll long long int 
+#define INF 2147483647
+#define PI acos(-1.0)
+#define EPS 1e-9
+typedef vector<int> vi;
+typedef pair<int, int> ii;
+typedef pair<ll, ll> llp;
+typedef pair<double, double> iid;
+ll a[1000100];
+ll calc(ll n)
+{
+    ll ans=1;
+    ll x=n;
+    for(ll i=2;i*i<=n;++i)
+    {
+        ll count=0;
+        while(n%i==0)
+            count++, n/=i;
+        ans*=((ll)pow(i, count+1)-1);
+        ans/=(i-1);
+    }
+    if(n>1)
+        ans*=(n*n)-1, ans/=n-1;
+    return ans-x;
+}
+int main()
+{
+    a[1]=0;
+    for(ll i=2;i<=1000000;++i)
+        a[i]=calc(i);
+    int cou=1, ans=INF;
+    int aa[20000], anss[20000];
+    int k=0, tmp;
+    map<int, int> mp;
+    for(ll i=3;i<=1000000;++i)
+    {
+        k=0;
+        mp.clear();
+        mp[i]=1;
+        ll mat=i;
+        ll x=a[i], mn=i, c=1, flag=0;
+        aa[k++]=i;
+        while(1)
+        {
+            if(x==mat)
+            {
+                flag=1;
+                break;
+            }
+            aa[k++]=x;
+            if(x>1000000){flag=0;
+                break;}
+            if(mp.count(x)!=0)
+                break;
+            c++;
+            mp[x]=1;
+            if(x!=0 && x!=1 && x!=41)
+            mn=min(mn, x);
+            x=a[x];
+        }
+        if(c>cou && flag)
+        {
+            ans=mn;
+            cou=c;
+            tmp=k;
+            for(int p=0;p<k;++p)
+                anss[p]=aa[p];
+        }
+    }
+    printf("%d %d\n", ans, cou);
+    return 0;
+}
